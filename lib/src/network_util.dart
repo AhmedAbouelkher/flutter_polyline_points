@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import '../src/utils/polyline_waypoint.dart';
 import '../src/utils/request_enums.dart';
 import '../src/PointLatLng.dart';
@@ -13,15 +15,17 @@ class NetworkUtil {
   ///Get the encoded string from google directions api
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
-      String googleApiKey,
-      PointLatLng origin,
-      PointLatLng destination,
-      TravelMode travelMode,
-      List<PolylineWayPoint> wayPoints,
-      bool avoidHighways,
-      bool avoidTolls,
-      bool avoidFerries,
-      bool optimizeWaypoints) async {
+    String googleApiKey,
+    PointLatLng origin,
+    PointLatLng destination,
+    TravelMode travelMode,
+    List<PolylineWayPoint> wayPoints,
+    bool avoidHighways,
+    bool avoidTolls,
+    bool avoidFerries,
+    bool optimizeWaypoints,
+    String langCode,
+  ) async {
     String mode = travelMode.toString().replaceAll('TravelMode.', '');
     PolylineResult result = PolylineResult();
     var params = {
@@ -31,6 +35,7 @@ class NetworkUtil {
       "avoidHighways": "$avoidHighways",
       "avoidFerries": "$avoidFerries",
       "avoidTolls": "$avoidTolls",
+      "language": langCode,
       "key": googleApiKey
     };
     if (wayPoints.isNotEmpty) {
@@ -41,20 +46,17 @@ class NetworkUtil {
       }
       params.addAll({"waypoints": wayPointsString});
     }
-    Uri uri =
-        Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
+    Uri uri = Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
 
     String url = uri.toString();
-    print('GOOGLE MAPS URL: ' + url);
+    debugPrint('GOOGLE MAPS URL: ' + url);
     var response = await http.get(url);
     if (response?.statusCode == 200) {
       var parsedJson = json.decode(response.body);
       result.status = parsedJson["status"];
-      if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
-          parsedJson["routes"] != null &&
-          parsedJson["routes"].isNotEmpty) {
-        result.points = decodeEncodedPolyline(
-            parsedJson["routes"][0]["overview_polyline"]["points"]);
+      if (parsedJson["status"]?.toLowerCase() == STATUS_OK && parsedJson["routes"] != null && parsedJson["routes"].isNotEmpty) {
+        result.points = decodeEncodedPolyline(parsedJson["routes"][0]["overview_polyline"]["points"]);
+        result.polylineResultExtended = polylineResultExtendedFromJson(response.body);
       } else {
         result.errorMessage = parsedJson["error_message"];
       }
@@ -90,8 +92,7 @@ class NetworkUtil {
       } while (b >= 0x20);
       int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
       lng += dlng;
-      PointLatLng p =
-          new PointLatLng((lat / 1E5).toDouble(), (lng / 1E5).toDouble());
+      PointLatLng p = new PointLatLng((lat / 1E5).toDouble(), (lng / 1E5).toDouble());
       poly.add(p);
     }
     return poly;

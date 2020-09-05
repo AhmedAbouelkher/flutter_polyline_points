@@ -1,7 +1,5 @@
 library flutter_polyline_points;
 
-import 'dart:convert';
-
 import 'package:flutter_polyline_points/src/utils/polyline_result.dart';
 import 'package:flutter_polyline_points/src/utils/polyline_waypoint.dart';
 import 'package:flutter_polyline_points/src/utils/request_enums.dart';
@@ -21,23 +19,29 @@ class PolylinePoints {
   /// which can be used to draw polyline between this two positions
   ///
   Future<PolylineResult> getRouteBetweenCoordinates(
-      String googleApiKey, PointLatLng origin, PointLatLng destination,
-      {TravelMode travelMode = TravelMode.driving,
-      List<PolylineWayPoint> wayPoints = const [],
-      bool avoidHighways = false,
-      bool avoidTolls = false,
-      bool avoidFerries = true,
-      bool optimizeWaypoints = false}) async {
+    String googleApiKey,
+    PointLatLng origin,
+    PointLatLng destination, {
+    TravelMode travelMode = TravelMode.driving,
+    List<PolylineWayPoint> wayPoints = const [],
+    bool avoidHighways = false,
+    bool avoidTolls = false,
+    bool avoidFerries = true,
+    bool optimizeWaypoints = false,
+    String langCode = 'en',
+  }) async {
     return await util.getRouteBetweenCoordinates(
-        googleApiKey,
-        origin,
-        destination,
-        travelMode,
-        wayPoints,
-        avoidHighways,
-        avoidTolls,
-        avoidFerries,
-        optimizeWaypoints);
+      googleApiKey,
+      origin,
+      destination,
+      travelMode,
+      wayPoints,
+      avoidHighways,
+      avoidTolls,
+      avoidFerries,
+      optimizeWaypoints,
+      langCode,
+    );
   }
 
   /// Decode and encoded google polyline
