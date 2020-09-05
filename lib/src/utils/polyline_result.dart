@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../../flutter_polyline_points.dart';
 import 'dart:convert';
 
@@ -118,7 +116,7 @@ class Route {
   final Bounds bounds;
   final String copyrights;
   final List<Leg> legs;
-  final Polyline overviewPolyline;
+  final PolylineExtended overviewPolyline;
   final String summary;
   final List<String> warnings;
   final List<dynamic> waypointOrder;
@@ -127,7 +125,7 @@ class Route {
     Bounds bounds,
     String copyrights,
     List<Leg> legs,
-    Polyline overviewPolyline,
+    PolylineExtended overviewPolyline,
     String summary,
     List<String> warnings,
     List<dynamic> waypointOrder,
@@ -146,7 +144,7 @@ class Route {
         bounds: json["bounds"] == null ? null : Bounds.fromJson(json["bounds"]),
         copyrights: json["copyrights"] == null ? null : json["copyrights"],
         legs: json["legs"] == null ? null : List<Leg>.from(json["legs"].map((x) => Leg.fromJson(x))),
-        overviewPolyline: json["overview_polyline"] == null ? null : Polyline.fromJson(json["overview_polyline"]),
+        overviewPolyline: json["overview_polyline"] == null ? null : PolylineExtended.fromJson(json["overview_polyline"]),
         summary: json["summary"] == null ? null : json["summary"],
         warnings: json["warnings"] == null ? null : List<String>.from(json["warnings"].map((x) => x)),
         waypointOrder: json["waypoint_order"] == null ? null : List<dynamic>.from(json["waypoint_order"].map((x) => x)),
@@ -339,7 +337,7 @@ class Step {
   final Distance duration;
   final Northeast endLocation;
   final String htmlInstructions;
-  final Polyline polyline;
+  final PolylineExtended polyline;
   final Northeast startLocation;
   final List<Step> steps;
   final TravelModeExtended travelMode;
@@ -350,7 +348,7 @@ class Step {
     Distance duration,
     Northeast endLocation,
     String htmlInstructions,
-    Polyline polyline,
+    PolylineExtended polyline,
     Northeast startLocation,
     List<Step> steps,
     TravelModeExtended travelMode,
@@ -373,7 +371,7 @@ class Step {
         duration: json["duration"] == null ? null : Distance.fromJson(json["duration"]),
         endLocation: json["end_location"] == null ? null : Northeast.fromJson(json["end_location"]),
         htmlInstructions: json["html_instructions"] == null ? null : json["html_instructions"],
-        polyline: json["polyline"] == null ? null : Polyline.fromJson(json["polyline"]),
+        polyline: json["polyline"] == null ? null : PolylineExtended.fromJson(json["polyline"]),
         startLocation: json["start_location"] == null ? null : Northeast.fromJson(json["start_location"]),
         steps: json["steps"] == null ? null : List<Step>.from(json["steps"].map((x) => Step.fromJson(x))),
         travelMode: json["travel_mode"] == null ? null : travelModeValues.map[json["travel_mode"]],
@@ -393,21 +391,21 @@ class Step {
       };
 }
 
-class Polyline {
-  Polyline({
+class PolylineExtended {
+  PolylineExtended({
     this.points,
   });
 
   final String points;
 
-  Polyline copyWith({
+  PolylineExtended copyWith({
     String points,
   }) =>
-      Polyline(
+      PolylineExtended(
         points: points ?? this.points,
       );
 
-  factory Polyline.fromJson(Map<String, dynamic> json) => Polyline(
+  factory PolylineExtended.fromJson(Map<String, dynamic> json) => PolylineExtended(
         points: json["points"] == null ? null : json["points"],
       );
 
