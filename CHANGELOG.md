@@ -1,3 +1,5 @@
+## [0.2.4+0] - 21-3-2021
+Update http to `0.13.1`
 ## [0.2.3] - 24-08-2020
 Fixed a bug with adding waypoint to request thanks to [EnzoSeason](https://github.com/EnzoSeason)
 ## [0.2.2] - 10-06-2020
