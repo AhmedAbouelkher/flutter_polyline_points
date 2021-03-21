@@ -48,13 +48,16 @@ class NetworkUtil {
     }
     Uri uri = Uri.https("maps.googleapis.com", "maps/api/directions/json", params);
 
-    String url = uri.toString();
-    debugPrint('GOOGLE MAPS URL: ' + url);
+    String _url = uri.toString();
+    debugPrint('GOOGLE MAPS URL: ' + _url);
+    final Uri url = Uri.parse(_url);
     var response = await http.get(url);
     if (response?.statusCode == 200) {
       var parsedJson = json.decode(response.body);
       result.status = parsedJson["status"];
-      if (parsedJson["status"]?.toLowerCase() == STATUS_OK && parsedJson["routes"] != null && parsedJson["routes"].isNotEmpty) {
+      if (parsedJson["status"]?.toLowerCase() == STATUS_OK &&
+          parsedJson["routes"] != null &&
+          parsedJson["routes"].isNotEmpty) {
         result.points = decodeEncodedPolyline(parsedJson["routes"][0]["overview_polyline"]["points"]);
         result.polylineResultExtended = polylineResultExtendedFromJson(response.body);
       } else {
